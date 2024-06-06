@@ -34,7 +34,7 @@ class ReleatedHabbitValidator:
 
     def __call__(self, value):
         if value.get(self.related_habbit):
-            if not value.get(self.related_habbit).is_plesant:
+            if not value.get(self.related_habbit).is_pleasant:
                 raise serializers.ValidationError(
                     'В связанные привычки могут попадать только привычки'
                     'с признаком "приятной" привычки'
