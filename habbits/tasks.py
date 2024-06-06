@@ -1,40 +1,32 @@
-from datetime import timedelta
+from datetime import timedelta, datetime
 
 from celery import shared_task
-from django.utils import timezone
-
-from habbits.services import send_telegram_message
 
 from habbits.models import Habbit
+from habbits.services import send_telegram_message
 
 
 @shared_task
 def send_alert():
     """Функция оповещения о полезной привычке"""
-    current_datetime = timezone.now().today().replace(second=0, microsecond=0)
-    habbits = Habbit.objects.filter(is_plesant=False).filter(time=current_datetime)
+    habbits = Habbit.objects.all().exclude(users__telegram_id=None)
+    time_min = datetime.now() - timedelta(seconds=30)
+    time_max = datetime.now() + timedelta(seconds=30)
     for habbit in habbits:
-        message_1 = f"Полезная привычка: {habbit}"
-        if habbit.related_habit:
-            message_2 = f"За выполнение Вы можете: {habbit.related_habit}"
-        elif habbit.reward:
-            message_3 = f"За выполнение Вам можно: {habbit.reward}"
-
-        for user in habbit.users.all():
-            if user.telegram_id:
-                send_telegram_message(
-                    telegram_id=user.telegram_id,
-                    message=message_1,
-                )
-                if habbit.related_habit:
-                    send_telegram_message(
-                        telegram_id=user.telegram_id,
-                        message=message_2,
-                    )
-                elif habbit.reward:
-                    send_telegram_message(
-                        telegram_id=user.telegram_id,
-                        message=message_3,
-                    )
-        habbit.time = habbit.time + timedelta(days=habbit.period)
-        habbit.save()
+        if habbit.update_time is None:
+            message = f"Полезная привычка: {habbit} \n" \
+                      f"За выполнение вы можете: {habbit.related_habbit} \n" \
+                      f"За выполнение вы можете: {habbit.reward}"
+            if time_min.time() <= habbit.time <= time_max.time():
+                send_telegram_message(habbit, message)
+                habbit.update_time = datetime.now().date() + timedelta(days=habbit.period)
+                habbit.save()
+        else:
+            message = f"Полезная привычка: {habbit} \n" \
+                      f"За выполнение вы можете: {habbit.related_habbit} \n" \
+                      f"За выполнение вы можете: {habbit.reward}"
+            if datetime.now().date() == habbit.update_time:
+                if time_min.time() <= habbit.time <= time_max.time():
+                    send_telegram_message(habbit, message)
+                    habbit.update_time += timedelta(days=habbit.period)
+                    habbit.save()
