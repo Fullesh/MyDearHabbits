@@ -151,8 +151,8 @@ REST_FRAMEWORK = {
 
 # Настройки срока действия токенов
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': os.getenv('ACCESS_TOKEN_LIFETIME'),
-    'REFRESH_TOKEN_LIFETIME': os.getenv('REFRESH_TOKEN_LIFETIME'),
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=3),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
 }
 
 CORS_ALLOWED_ORIGINS = [
@@ -191,7 +191,7 @@ CELERY_BROKER_URL = os.getenv('CACHE_LOCATION')
 CELERY_RESULT_BACKEND = os.getenv('CACHE_LOCATION')
 
 # Часовой пояс для работы Celery
-CELERY_TIMEZONE = "Australia/Tasmania"
+CELERY_TIMEZONE = TIME_ZONE
 
 # Флаг отслеживания выполнения задач
 CELERY_TASK_TRACK_STARTED = True
