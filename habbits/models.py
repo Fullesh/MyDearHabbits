@@ -18,7 +18,7 @@ NULLABLE = {'blank': True, 'null': True}
 class Habbit(models.Model):
     owner = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, verbose_name='Владелец', **NULLABLE)
     place = models.CharField(max_length=150, verbose_name='Место')
-    time = models.DateTimeField(auto_now=True, verbose_name='Время когда выполняется привычка')
+    time = models.TimeField(verbose_name='Время когда выполняется привычка', **NULLABLE)
     action = models.CharField(max_length=150, verbose_name='Действие')
     is_pleasant = models.BooleanField(default=False, verbose_name='признак приятной привычки')
     related_habbit = models.ForeignKey('self', on_delete=models.CASCADE, verbose_name='Связанная привычка', **NULLABLE)
@@ -26,7 +26,8 @@ class Habbit(models.Model):
     reward = models.CharField(max_length=150, verbose_name='Вознаграждение')
     duration = models.DurationField(default=timedelta(minutes=2), verbose_name='Время на выполнение (минуты)')
     is_public = models.BooleanField(default=False, verbose_name='Публичная')
-    users = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name="Пользователи", related_name="users", **NULLABLE)
+    users = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, verbose_name="Пользователи", related_name="users", **NULLABLE)
+    update_time = models.DateField(verbose_name='Дата следующей отправки', **NULLABLE)
 
     def __str__(self):
         return f'Я буду {self.action} в {self.time} в {self.place}'
