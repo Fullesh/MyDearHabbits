@@ -14,12 +14,12 @@ class HabbitSerializer(serializers.ModelSerializer):
         fields = '__all__'
         validators = [
             MultiplyChoiseHabbitValidator(
-                revard="revard", related_habbit="releated_habbit"
+                revard="reward", related_habbit="related_habbit"
             ),
             ReleatedHabbitValidator(
                 related_habbit="related_habbit"
             ),
             PleasantHabbitValidator(
-                is_pleasant='is_pleasant', revard='revard', related_habbit='related_habbit'
+                is_pleasant='is_pleasant', revard='reward', related_habbit='related_habbit'
             )
         ]
