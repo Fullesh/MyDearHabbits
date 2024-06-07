@@ -5,3 +5,4 @@ class IsCreator(BasePermission):
 
     def has_permission(self, request, view):
         return request.user.email == view.get_object().email
+        
