@@ -101,3 +101,4 @@ class HabitsTestCase(APITestCase):
         response = self.client.post(url, data=data)
         print("\ntest_DurationValidator")
         self.assertEquals(response.status_code, status.HTTP_400_BAD_REQUEST)
+        
