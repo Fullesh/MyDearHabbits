@@ -24,7 +24,8 @@ class Habbit(models.Model):
     revard = models.CharField(max_length=150, verbose_name='Вознаграждение')
     duration = models.DurationField(default=timedelta(minutes=2), verbose_name='Время на выполнение (минуты)')
     is_public = models.BooleanField(default=False, verbose_name='Публичная')
-    users = models.ManyToManyField(settings.AUTH_USER_MODEL, verbose_name="Пользователи", related_name="users", **NULLABLE)
+    users = models.ForeignKey(settings.AUTH_USER_MODEL, on.delete=models.CASCADE, verbose_name="Пользователи",
+                              related_name="users", **NULLABLE)
 
     def __str__(self):
         return f'Я буду {self.action} в {self.time} в {self.place}'
