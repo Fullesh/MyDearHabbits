@@ -139,7 +139,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = 'users.User'
 
-# Настройки JWT-токенов
+# ГЌГ Г±ГІГ°Г®Г©ГЄГЁ JWT-ГІГ®ГЄГҐГ­Г®Гў
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework_simplejwt.authentication.JWTAuthentication',
@@ -149,10 +149,10 @@ REST_FRAMEWORK = {
     ]
 }
 
-# Настройки срока действия токенов
+# ГЌГ Г±ГІГ°Г®Г©ГЄГЁ Г±Г°Г®ГЄГ  Г¤ГҐГ©Г±ГІГўГЁГї ГІГ®ГЄГҐГ­Г®Гў
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME': os.getenv('ACCESS_TOKEN_LIFETIME'),
-    'REFRESH_TOKEN_LIFETIME': os.getenv('REFRESH_TOKEN_LIFETIME'),
+    'ACCESS_TOKEN_LIFETIME': timedelta(hours=3),
+    'REFRESH_TOKEN_LIFETIME': timedelta(days=1),
 }
 
 CORS_ALLOWED_ORIGINS = [
@@ -179,22 +179,22 @@ if CACHE_ENABLED:
 
 CELERY_BEAT_SCHEDULE = {
     'task-name': {
-        'task': 'habbits.tasks.send_alert',  # Путь к задаче
+        'task': 'habbits.tasks.send_alert',  # ГЏГіГІГј ГЄ Г§Г Г¤Г Г·ГҐ
         'schedule': timedelta(minutes=1),
     },
 }
 
-# URL-адрес брокера сообщений
+# URL-Г Г¤Г°ГҐГ± ГЎГ°Г®ГЄГҐГ°Г  Г±Г®Г®ГЎГ№ГҐГ­ГЁГ©
 CELERY_BROKER_URL = os.getenv('CACHE_LOCATION')
 
-# URL-адрес брокера результатов, также Redis
+# URL-Г Г¤Г°ГҐГ± ГЎГ°Г®ГЄГҐГ°Г  Г°ГҐГ§ГіГ«ГјГІГ ГІГ®Гў, ГІГ ГЄГ¦ГҐ Redis
 CELERY_RESULT_BACKEND = os.getenv('CACHE_LOCATION')
 
-# Часовой пояс для работы Celery
+# Г—Г Г±Г®ГўГ®Г© ГЇГ®ГїГ± Г¤Г«Гї Г°Г ГЎГ®ГІГ» Celery
 CELERY_TIMEZONE = "Australia/Tasmania"
 
-# Флаг отслеживания выполнения задач
+# Г”Г«Г ГЈ Г®ГІГ±Г«ГҐГ¦ГЁГўГ Г­ГЁГї ГўГ»ГЇГ®Г«Г­ГҐГ­ГЁГї Г§Г Г¤Г Г·
 CELERY_TASK_TRACK_STARTED = True
 
-# Максимальное время на выполнение задачи
+# ГЊГ ГЄГ±ГЁГ¬Г Г«ГјГ­Г®ГҐ ГўГ°ГҐГ¬Гї Г­Г  ГўГ»ГЇГ®Г«Г­ГҐГ­ГЁГҐ Г§Г Г¤Г Г·ГЁ
 CELERY_TASK_TIME_LIMIT = 30 * 60
