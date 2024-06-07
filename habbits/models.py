@@ -3,9 +3,7 @@ from datetime import datetime, timedelta
 import pytz as pytz
 from django.db import models
 
-import users
 from config import settings
-from users.models import User
 
 zone = pytz.timezone(settings.TIME_ZONE)
 current_datetime = datetime.now(zone)
